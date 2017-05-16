@@ -5,7 +5,7 @@ var options = {
     }
 };
 
-describe('initial test', function() {
+describe('The initial test', function() {
     it('should open the browser', function() {
         return webdriverio
             .remote(options)
