@@ -138,7 +138,7 @@ gulp.task('eslint:fix', function () {
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
 });
 
-gulp.task('test', ['inject:test', 'ngconstant:dev'], function () {
+gulp.task('test', function () {
     let opts = {
         baseURL: 'https://selenium-release.storage.googleapis.com',
         version: '3.4.0',
@@ -147,10 +147,15 @@ gulp.task('test', ['inject:test', 'ngconstant:dev'], function () {
                 version: '0.16.1',
                 arch: process.arch,
                 baseURL: 'https://github.com/mozilla/geckodriver/releases/download'
+            },
+            chrome: {
+                version: '2.9',
+                arch: process.arch,
+                baseURL: 'https://chromedriver.storage.googleapis.com/'
             }
         }
     };
-    
+
     selenium.install(opts, function() {
         console.log("selenium standalone installed");
         selenium.start(opts, function() {
