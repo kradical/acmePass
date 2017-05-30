@@ -58,6 +58,7 @@
     "run-sequence": "1.2.2",
     "selenium-standalone": "^6.4.1",
     "wdio-mocha-framework": "^0.5.10",
+    "wdio-spec-reporter": "^0.1.0",
     "webdriverio": "^4.8.0",
     "xml2js": "0.4.17",
     "yargs": "5.0.0"

@@ -1,4 +1,5 @@
 const webdriverio = require('webdriverio');
+const assert = require('assert');
 
 const options = {
     desiredCapabilities: {
@@ -14,21 +15,20 @@ describe('The initial test', function() {
         return client.init();
     });
 
-    it('should open the browser', function() {
+    it('should have the correct title', function() {
         return client
-            .url('http://www.google.com')
+            .url('http://localhost:8080')
             .getTitle().then(function(title) {
-                console.log('Title was: ' + title);
+                assert.strictEqual(title, "ACME Security Systems");
             });
     });
 
-    it('should open the browser', function() {
+    it('should open the sign in window when the signup button', function() {
         return client
-            .url('http://www.facebook.com')
-            .getTitle().then(function(title) {
-                console.log('Title was: ' + title);
+            .getText('.nav.nav-tabs li:nth-child(8)').then(function(text) {
+                assert.strictEqual(text.trim(), "SIGN IN");
             });
-    });
+    })
 
     after(function() {
         return client.end();
