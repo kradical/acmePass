@@ -63,12 +63,111 @@ describe('Adding ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe('Editing ACMEPass passwords', function () {
-    before(client.setup);
+/**
+ * Tests that all fields of a password are editable
+ */
+describe.only('Editing ACMEPass passwords', function () {
+    const mainButton = 'button.btn.btn-primary';
+    const savePass = `div.modal-footer ${mainButton}`;
+    const firstRow = 'tr:first-child';
+    
+    /**
+     * Setup the page to be editting a brand new acmePass
+     */
+    before(function() {
+        const createPass = mainButton
+        const sortCreated = 'th[jh-sort-by="createdDate"]';
 
-    it('has a stub', function () {
         return client
+            .setup()
+            .click(createPass)
+            .waitForVisible('#field_site')
+            .setValue('#field_site', 'testsite')
+            .setValue('#field_login', 'testlogin')
+            .setValue('#field_password', 'testpassword')
+            .click(savePass)
+            .waitForVisible(sortCreated)
+            .click(sortCreated)
+            .click(sortCreated)
+    });
+
+    beforeEach(function() {
+        const editIcon = 'button.btn.btn-info.btn-sm';
+        const firstRowEdit = `${firstRow} ${editIcon}`;
+
+        return client
+            .waitForVisible(firstRowEdit)
+            .click(firstRowEdit);
     })
+
+    it('edits the site field', function () {
+        const siteCell = 'td:nth-child(2)';
+        const firstRowSite = `${firstRow} ${siteCell}`;
+
+        return client
+            .waitForVisible('#field_site')
+            .setValue('#field_site', 'testsiteEDIT')
+            .click(savePass)
+            .waitForVisible(firstRowSite)
+            .getText(firstRowSite).then(function(text) {
+                assert.strictEqual(text, 'testsiteEDIT', `site fields not equal '${text}' !== 'testsiteEDIT'`);
+            });
+    });
+
+    it('edits the login field', function () {
+        const loginCell = 'td:nth-child(3)';
+        const firstRowLogin = `${firstRow} ${loginCell}`;
+
+        return client
+            .waitForVisible('#field_login')
+            .setValue('#field_login', 'testloginEDIT')
+            .click(savePass)
+            .waitForVisible(firstRowLogin)
+            .getText(firstRowLogin).then(function(text) {
+                assert.strictEqual(text, 'testloginEDIT', `login fields not equal '${text}' !== 'testloginEDIT'`);
+            });
+    });
+
+    it('edits the password field', function () {
+        const passwordCell = 'td:nth-child(4)';
+        const firstRowPassword = `${firstRow} ${passwordCell}`;
+        const eyeIcon = 'span.glyphicon.glyphicon-eye-open'
+        const firstRowShowPassword = `${firstRow} ${eyeIcon}`;
+
+        return client
+            .waitForVisible('#field_login')
+            .setValue('#field_login', 'testpasswordEDIT')
+            .click(savePass)
+            .waitForVisible(firstRowShowPassword)
+            .click(firstRowShowPassword)
+            .waitForVisible(firstRowPassword)
+            .getText(firstRowPassword).then(function(text) {
+                assert.strictEqual(text, 'testpasswordEDIT', `password fields not equal '${text}' !== 'testpasswordEDIT'`);
+            });
+    });
+
+    it('cancels changes', function () {
+        const siteCell = 'td:nth-child(2)';
+        const firstRowSite = `${firstRow} ${siteCell}`;
+        const cancelPass = 'div.modal-footer button.btn.btn-default';
+
+        return client
+            .waitForVisible('#field_site')
+            .setValue('#field_site', 'testsiteEDIT2OMG')
+            .click(cancelPass)
+            .waitForVisible(firstRowSite)
+            .getText(firstRowSite).then(function(text) {
+                assert.strictEqual(text, 'testsiteEDIT', `site fields not equal '${text}' !== 'testsiteEDIT'`);
+            });
+    });
+
+    it('does not allow saving an unedited pass', function () {
+        return client
+            .waitForVisible(savePass)
+            .getAttribute(savePass, "disabled").then(function(text) {
+                assert.strictEqual(text, "disabled", `save button should be disabled, '${text}' !== 'disabled'`);
+            });
+    });
 
     after(client.end);
 });
@@ -87,7 +186,7 @@ describe('Deleting ACMEPass passwords', function () {
  * Tests that a password generated with default parameters meets requirements
  * (lowercase, uppercase, digits, special characteres, length 8)
  */
-describe.only('Generating ACMEPass passwords - default settings', function () {
+describe('Generating ACMEPass passwords - default settings', function () {
     before(client.setup);
 
     const newAcmePassButton = 'button.btn.btn-primary';
