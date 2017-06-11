@@ -183,7 +183,7 @@ describe.only('Editing ACMEPass passwords', function () {
         return client
             .waitForVisible(savePass)
             .getAttribute(savePass, "disabled").then(function(text) {
-                assert.strictEqual(text, "disabled", `save button should be disabled, '${text}' !== 'disabled'`);
+                assert.strictEqual(text, 'true', `save button should be disabled, '${text}' !== 'true'`);
             });
     });
 
