@@ -18,6 +18,7 @@
 		vm.clear = clear;
 		vm.users = User.query();
 		vm.pwdVisible = false;
+		vm.toggleVisible = toggleVisible;
 
 		$timeout(function () {
 			angular.element('.form-group:eq(1)>input').focus();
@@ -65,5 +66,10 @@
 		function openCalendar(date) {
 			vm.datePickerOpenStatus[date] = true;
 		}
+
+		vm.showPassword = false;
+        function toggleVisible() {
+            vm.showPassword = !vm.showPassword;
+        }
 	}
 })();

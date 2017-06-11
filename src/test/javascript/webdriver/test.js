@@ -53,7 +53,7 @@ describe('Hiding/showing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe.only('Creating ACMEPass passwords', function () {
+describe('Creating ACMEPass passwords', function () {
     before(client.setup);
 
     const newAcmePassButton = 'button.btn.btn-primary';
@@ -151,19 +151,15 @@ describe.only('Editing ACMEPass passwords', function () {
     });
 
     it('edits the password field', function () {
-        const passwordCell = 'td:nth-child(4)';
+        const passwordCell = 'td:nth-child(4) input.acmepass-password';
         const firstRowPassword = `${firstRow} ${passwordCell}`;
-        const eyeIcon = 'span.glyphicon.glyphicon-eye-open'
-        const firstRowShowPassword = `${firstRow} ${eyeIcon}`;
 
         return client
-            .waitForVisible('#field_login')
-            .setValue('#field_login', 'testpasswordEDIT')
+            .waitForVisible('#field_password')
+            .setValue('#field_password', 'testpasswordEDIT')
             .click(savePass)
-            .waitForVisible(firstRowShowPassword)
-            .click(firstRowShowPassword)
             .waitForVisible(firstRowPassword)
-            .getText(firstRowPassword).then(function(text) {
+            .getValue(firstRowPassword).then(function(text) {
                 assert.strictEqual(text, 'testpasswordEDIT', `password fields not equal '${text}' !== 'testpasswordEDIT'`);
             });
     });

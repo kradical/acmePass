@@ -51,8 +51,9 @@
             vm.transition();
         }
 
+        vm.showPasswords = {}
         function toggleVisible(id) {
-            //TODO show password and change eye icon
+            vm.showPasswords[id] = !vm.showPasswords[id];
         }
 
         function transition() {
