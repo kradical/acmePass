@@ -53,11 +53,33 @@ describe('Hiding/showing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe('Adding ACMEPass passwords', function () {
+describe.only('Creating ACMEPass passwords', function () {
     before(client.setup);
 
-    it('has a stub', function () {
+    const newAcmePassButton = 'button.btn.btn-primary';
+    const saveAcmePassButton = '.modal-footer .btn-primary';
+    const cancelButton = '.btn-default';
+
+    it('it creates an ACMEPass', function () {
         return client
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'testname')
+            .setValue('#field_login', 'testlogin')
+            .setValue('#field_password', 'testpassword')
+            .click(saveAcmePassButton)
+    })
+
+    it('it cancels the creation of an ACMEPass', function () {
+        return client
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'testname')
+            .setValue('#field_login', 'testlogin')
+            .setValue('#field_password', 'testpassword')
+            .click(cancelButton)
     })
 
     after(client.end);
