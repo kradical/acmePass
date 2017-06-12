@@ -53,7 +53,7 @@ describe('Hiding/showing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe('Creating ACMEPass passwords', function () {
+describe.only('Creating ACMEPass passwords', function () {
     before(client.setup);
 
     const newAcmePassButton = 'button.btn.btn-primary';
@@ -82,6 +82,63 @@ describe('Creating ACMEPass passwords', function () {
             .click(cancelButton)
     })
 
+    it('it has a disabled Save button when the site field is invalid', function () {
+        return client
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'sm')
+            .setValue('#field_login', 'testlogin')
+            .setValue('#field_password', 'testpassword')
+            .isEnabled(saveAcmePassButton).then(function(isEnabled) {
+                assert.equal(isEnabled, false, 'Save button should be disabled');
+            })
+            .click(cancelButton)
+    })
+
+    it('it has a disabled Save button when the site field is empty', function () {
+        return client
+            .waitForExist(newAcmePassButton)
+            .pause(6000)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', '')
+            .setValue('#field_login', 's')
+            .setValue('#field_password', 'testpassword')
+            .isEnabled(saveAcmePassButton).then(function(isEnabled2) {
+                assert.equal(isEnabled2, false, 'Save button  be disabled');
+            })
+            .click(cancelButton)
+    })
+
+    it('it has a disabled Save button when the login field is empty', function () {
+        return client
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'testname')
+            .setValue('#field_login', '')
+            .setValue('#field_password', 'testpassword')
+            .isEnabled(saveAcmePassButton).then(function(isEnabled) {
+                assert.equal(isEnabled, false, 'Save button should be disabled');
+            })
+            .click(cancelButton)
+    })
+
+    it('it has a disabled Save button when the password field is empty', function () {
+        return client
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'testname')
+            .setValue('#field_login', 'testlogin')
+            .setValue('#field_password', '')
+            .isEnabled(saveAcmePassButton).then(function(isEnabled) {
+                assert.equal(isEnabled, false, 'Save button should be disabled');
+            })
+            .click(cancelButton)
+    })
+
     after(client.end);
 });
 
@@ -92,7 +149,7 @@ describe.only('Editing ACMEPass passwords', function () {
     const mainButton = 'button.btn.btn-primary';
     const savePass = `div.modal-footer ${mainButton}`;
     const firstRow = 'tr:first-child';
-    
+
     /**
      * Setup the page to be editting a brand new acmePass
      */
