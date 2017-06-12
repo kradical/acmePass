@@ -62,6 +62,12 @@
             // Changed for loop to while loop
             // This ensures desired password length is achieved given no repeated characters
             while (count != vm.genOptions.length) {
+
+                // Do not crash the application when no options were selected, just generate an empty string
+                if (!vm.genOptions.lower && !vm.genOptions.upper && !vm.genOptions.digits && !vm.genOptions.special && !vm.genOptions.repetition) {
+                     break;
+                }
+
                 // Changed Math.round() to Math.floor()
                 // Math.round() makes position [vm.getOptions.length] a possibility, hence "undefined" exceptions
                 var position = Math.floor(Math.random() * chars.length);
