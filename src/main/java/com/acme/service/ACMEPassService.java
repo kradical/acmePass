@@ -1,6 +1,7 @@
 package com.acme.service;
 
 import com.acme.domain.ACMEPass;
+import com.acme.domain.User;
 import com.acme.repository.ACMEPassRepository;
 import com.acme.security.SecurityUtils;
 import com.acme.service.dto.ACMEPassDTO;
@@ -88,9 +89,13 @@ public class ACMEPassService {
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete ACMEPass : {}", id);
+		if (id == null) return;
 
-		if (acmePassRepository.findOne(id).getUser().equals(SecurityUtils.getCurrentUser())) {
-            acmePassRepository.delete(id);
-        }
+		String passOwner = acmePassRepository.getOne(id).getUser().getLogin();
+		String currentUser = SecurityUtils.getCurrentUser();
+
+		if (passOwner.equals(currentUser)) {
+			acmePassRepository.delete(id);
+		}
 	}
 }
