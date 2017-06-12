@@ -33,6 +33,7 @@
 				size: 'sm'
 			}).result.then(function (password) {
 				vm.acmePass.password = password;
+				$scope.editForm.$setDirty();
 			}, function () {
 			});
 		}
