@@ -99,7 +99,6 @@ describe.only('Creating ACMEPass passwords', function () {
     it('it has a disabled Save button when the site field is empty', function () {
         return client
             .waitForExist(newAcmePassButton)
-            .pause(6000)
             .click(newAcmePassButton)
             .waitForExist('#field_site')
             .setValue('#field_site', '')
@@ -145,7 +144,7 @@ describe.only('Creating ACMEPass passwords', function () {
 /**
  * Tests that all fields of a password are editable
  */
-describe('Editing ACMEPass passwords', function () {
+describe.only('Editing ACMEPass passwords', function () {
     const mainButton = 'button.btn.btn-primary';
     const savePass = `div.modal-footer ${mainButton}`;
     const firstRow = 'tr:first-child';
@@ -264,10 +263,10 @@ describe.only('Generating ACMEPass passwords', function () {
     before(client.setup);
 
     before(function () {
-        
+
         const newAcmePassButton = 'button.btn.btn-primary';
         const generateButton1 = 'button.btn.btn-primary';
-        
+
         return client
             .waitForExist(newAcmePassButton)
             .click(newAcmePassButton)
@@ -279,11 +278,11 @@ describe.only('Generating ACMEPass passwords', function () {
 
     // tests default settings (lowercase, uppercase, digits, special characteres, length 8)
     it('tests default settings', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
-        
+
         return client
             .waitForVisible(generateButton2, 5000)
             .click(generateButton2)
@@ -301,14 +300,14 @@ describe.only('Generating ACMEPass passwords', function () {
 
     // tests lowercase characters and length 8
     it('tests lowercase characters', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const upperCase = '#field_upper';
         const digits = '#field_digits';
         const special = '#field_special';
-        
+
         return client
             .waitForVisible(upperCase, 5000)
             .click(upperCase)
@@ -323,20 +322,20 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^[a-z]{8}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests uppercase characters and length 8
     it('tests uppercase characters', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
         const digits = '#field_digits';
         const special = '#field_special';
-        
+
         return client
             .waitForVisible(lowerCase, 5000)
             .click(lowerCase)
@@ -351,20 +350,20 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^[A-Z]{8}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests digits and length 8
     it('tests digits', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
-        const upperCase = '#field_upper';        
+        const upperCase = '#field_upper';
         const special = '#field_special';
-        
+
         return client
             .waitForVisible(lowerCase, 5000)
             .click(lowerCase)
@@ -379,20 +378,20 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^[0-9]{8}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests special characters and length 8
     it('tests special characters', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
-        const upperCase = '#field_upper';        
+        const upperCase = '#field_upper';
         const digits = '#field_digits';
-                
+
         return client
             .waitForVisible(lowerCase, 5000)
             .click(lowerCase)
@@ -408,21 +407,21 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^[!@#$%_-]{8}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests prevent repeated characters using digits and length 10
     it('tests prevent repeated characters', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
-        const upperCase = '#field_upper';        
+        const upperCase = '#field_upper';
         const special = '#field_special';
         const repeated = '#field_repetition';
-        
+
         return client
             .waitForVisible(lowerCase, 5000)
             .click(lowerCase)
@@ -439,18 +438,18 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^(?:([0-9])(?!.*\1)){10}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests all parameters and length 69 (maximum possitble length given no repeated characters)
     it('tests all parameters', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const repeated = '#field_repetition';
-        
+
         return client
             .waitForVisible(repeated, 5000)
             .click(repeated)
@@ -464,21 +463,21 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^(?:([a-zA-Z0-9!@#$%_-])(?!.*\1)){69}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests no parameters and length 8
     it('tests no parameters', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
-        const upperCase = '#field_upper';  
-        const digits = '#field_digits';      
+        const upperCase = '#field_upper';
+        const digits = '#field_digits';
         const special = '#field_special';
-        
+
         return client
             .waitForVisible(lowerCase, 5000)
             .click(lowerCase)
@@ -494,18 +493,18 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^(?![\s\S])/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests length 0 and default parameters
     it('tests length 0', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
-        
+
         return client
             .waitForVisible(lowerCase, 5000)
             .setValue('#field_length', '0')
@@ -518,18 +517,18 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^(?![\s\S])/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     // tests length 2048 and default parameters
     it('tests length 2048', function () {
-        
+
         const generateButton1 = 'button.btn.btn-primary';
         const generateButton2 = 'button.btn.btn-primary';
         const cancelButton = 'button.btn.btn-default';
         const lowerCase = '#field_lower';
-        
+
         return client
             .waitForVisible(lowerCase, 5000)
             .setValue('#field_length', '2048')
@@ -542,8 +541,8 @@ describe.only('Generating ACMEPass passwords', function () {
                 console.log('Password generated was: ' + trimmed)
                 chai.expect(trimmed).to.match(/^[A-Za-z0-9!@#$%_-]{2048}$/)
             })
-            .click(cancelButton)    
-            .click(generateButton1)        
+            .click(cancelButton)
+            .click(generateButton1)
     })
 
     after(client.end);
