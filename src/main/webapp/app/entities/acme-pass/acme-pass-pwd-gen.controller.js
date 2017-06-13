@@ -13,6 +13,7 @@
         vm.clear = clear;
         vm.generate = generate;
         vm.save = save;
+        vm.checkImpossible = checkImpossible;
 
         vm.genOptions = {
             length: 8,
@@ -39,50 +40,46 @@
         }
 
         function generate() {
-            var chars = "";
+            let possible = "";
+            possible += vm.genOptions.lower ? vm.chars.lower : ""
+            possible += vm.genOptions.upper ? vm.chars.upper : ""
+            possible += vm.genOptions.digits ? vm.chars.digits : ""
+            possible += vm.genOptions.special ? vm.chars.special : ""
+
+            const notEnoughCharacters = vm.genOptions.repetition && vm.genOptions.length > possible.length;
+            const zeroCharacters = possible.length === 0;
+
+            if (zeroCharacters || notEnoughCharacters) {
+                console.log("error");
+                return;
+            }
+
             vm.password = "";
-            var count = 0;
 
-            if (vm.genOptions.lower) {
-                chars += vm.chars.lower;
-            }
+            for (let i = 0; i < vm.genOptions.length; i++) {
+                const position = Math.floor(Math.random() * possible.length);
+                const newChar = possible[position];
+                vm.password += newChar;
 
-            if (vm.genOptions.upper) {
-                chars += vm.chars.upper;
-            }
-
-            if (vm.genOptions.digits) {
-                chars += vm.chars.digits;
-            }
-
-            if (vm.genOptions.special) {
-                chars += vm.chars.special;
-            }
-
-            // Changed for loop to while loop
-            // This ensures desired password length is achieved given no repeated characters
-            while (count != vm.genOptions.length) {
-
-                // Do not crash the application when no options were selected, just generate an empty string
-                if (!vm.genOptions.lower && !vm.genOptions.upper && !vm.genOptions.digits && !vm.genOptions.special && !vm.genOptions.repetition) {
-                     break;
-                }
-
-                // Changed Math.round() to Math.floor()
-                // Math.round() makes position [vm.getOptions.length] a possibility, hence "undefined" exceptions
-                var position = Math.floor(Math.random() * chars.length);
-                
                 if (vm.genOptions.repetition) {
-                    if (vm.password.indexOf(chars[position]) === -1) {
-                        vm.password += chars[position];
-                        count++;
-                    }
-                } else {
-                    vm.password += chars[position];
-                    count++;
+                    possible = possible.split(newChar).join('');
                 }
             }
         }
+
+        function checkImpossible() {
+            let possible = "";
+            possible += vm.genOptions.lower ? vm.chars.lower : ""
+            possible += vm.genOptions.upper ? vm.chars.upper : ""
+            possible += vm.genOptions.digits ? vm.chars.digits : ""
+            possible += vm.genOptions.special ? vm.chars.special : ""
+
+            const notEnoughCharacters = vm.genOptions.repetition && vm.genOptions.length > possible.length;
+            const zeroCharacters = possible.length === 0;
+
+            return zeroCharacters || notEnoughCharacters;
+        }
+
 
         function save() {
             $scope.$emit('acmeApp:ACMEPassPwdGen', vm.password);
