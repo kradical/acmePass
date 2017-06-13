@@ -43,11 +43,41 @@ describe('Listing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe('Hiding/showing ACMEPass passwords', function () {
+describe.only('Hiding/Showing ACMEPass passwords', function () {
     before(client.setup);
 
-    it('has a stub', function () {
+    const newAcmePassButton = 'button.btn.btn-primary';
+    const saveAcmePassButton = '.modal-footer .btn-primary';
+    const passwordtoggle = 'body > div:nth-child(3) > div > div > div.table-responsive > table > tbody > tr:nth-child(1) > td:nth-child(4) > div > span'
+    const inputfield = 'body > div:nth-child(3) > div > div > div.table-responsive > table > tbody > tr:nth-child(1) > td:nth-child(4) > div > input'
+
+    it('it creates an ACMEPass', function () {
         return client
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'testname')
+            .setValue('#field_login', 'testlogin')
+            .setValue('#field_password', 'testpassword')
+            .click(saveAcmePassButton)
+    })
+
+    it('it shows ACMEPass passwords', function () {
+        return client
+            .waitForVisible(passwordtoggle)
+            .click(passwordtoggle)
+            .getAttribute(inputfield, 'type').then(function (text) {
+                assert.strictEqual(text, 'text', 'The password is not visible');
+            });
+    })
+
+    it('it hides ACMEPass passwords', function () {
+        return client
+            .waitForVisible(passwordtoggle)
+            .click(passwordtoggle)
+            .getAttribute(inputfield, 'type').then(function (text) {
+                assert.strictEqual(text, 'password', 'The password is still visible');
+            });
     })
 
     after(client.end);
