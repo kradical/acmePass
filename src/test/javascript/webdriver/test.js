@@ -120,7 +120,7 @@ describe('Creating ACMEPass passwords', function () {
             .setValue('#field_site', 'sm')
             .setValue('#field_login', 'testlogin')
             .setValue('#field_password', 'testpassword')
-            .isEnabled(saveAcmePassButton).then(function(isEnabled) {
+            .isEnabled(saveAcmePassButton).then(function (isEnabled) {
                 assert.equal(isEnabled, false, 'Save button should be disabled');
             })
             .click(cancelButton)
@@ -134,7 +134,7 @@ describe('Creating ACMEPass passwords', function () {
             .setValue('#field_site', '')
             .setValue('#field_login', 's')
             .setValue('#field_password', 'testpassword')
-            .isEnabled(saveAcmePassButton).then(function(isEnabled2) {
+            .isEnabled(saveAcmePassButton).then(function (isEnabled2) {
                 assert.equal(isEnabled2, false, 'Save button  be disabled');
             })
             .click(cancelButton)
@@ -148,7 +148,7 @@ describe('Creating ACMEPass passwords', function () {
             .setValue('#field_site', 'testname')
             .setValue('#field_login', '')
             .setValue('#field_password', 'testpassword')
-            .isEnabled(saveAcmePassButton).then(function(isEnabled) {
+            .isEnabled(saveAcmePassButton).then(function (isEnabled) {
                 assert.equal(isEnabled, false, 'Save button should be disabled');
             })
             .click(cancelButton)
@@ -162,7 +162,7 @@ describe('Creating ACMEPass passwords', function () {
             .setValue('#field_site', 'testname')
             .setValue('#field_login', 'testlogin')
             .setValue('#field_password', '')
-            .isEnabled(saveAcmePassButton).then(function(isEnabled) {
+            .isEnabled(saveAcmePassButton).then(function (isEnabled) {
                 assert.equal(isEnabled, false, 'Save button should be disabled');
             })
             .click(cancelButton)
@@ -276,11 +276,57 @@ describe('Editing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe('Deleting ACMEPass passwords', function () {
+/**
+ * Tests that password deletion works as expected
+ */
+describe.only('Deleting ACMEPass passwords', function () {
     before(client.setup);
 
-    it('has a stub', function () {
+    const firstRow = 'tr:first-child'
+    const idCell = 'td:nth-child(1)'
+    const firstRowId = `${firstRow} ${idCell}`
+    const newAcmePassButton = 'button.btn.btn-primary'
+    const saveAcmePassButton = '.modal-footer .btn-primary'
+    const deleteIcon = 'button.btn.btn-danger.btn-sm'
+    const deleteButton = 'button.btn.btn-danger'
+    const firstRowDelete = `${firstRow} ${deleteIcon}`
+    const sortCreated = 'th[jh-sort-by="createdDate"]'
+
+    it('it creates two ACMEPasses and deletes the most recent one', function () {
+        var id1
         return client
+            // create first ACME Pass
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site', 5000)
+            .setValue('#field_site', 'testsite1')
+            .setValue('#field_login', 'testlogin1')
+            .setValue('#field_password', 'testpassword1')
+            .click(saveAcmePassButton)
+            // create second ACME Pass
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site', 5000)
+            .setValue('#field_site', 'testsite2')
+            .setValue('#field_login', 'testlogin2')
+            .setValue('#field_password', 'testpassword2')
+            .click(saveAcmePassButton)
+            .waitForExist(sortCreated, 5000)
+            .click(sortCreated)
+            .click(sortCreated)
+            .getText(firstRowId).then(function (text) {
+                id1 = text
+            })
+            // delete the most recent (second) ACME Pass
+            .click(firstRowDelete)
+            .waitForExist(deleteButton)
+            .click(deleteButton)
+            // wait before reading the value of first row ID
+            .pause(500)
+            // ensure the correct ACME Pass has been deleted
+            .getText(firstRowId).then(function (text) {
+                assert.notStrictEqual(id1, text, `ID of deleted pass should not equal ID of most recent pass '${id1}' !== '${text}'`);
+            });
     })
 
     after(client.end);
@@ -289,7 +335,7 @@ describe('Deleting ACMEPass passwords', function () {
 /**
  * Tests that password generation works as expected
  */
-describe.only('Generating ACMEPass passwords', function () {
+describe('Generating ACMEPass passwords', function () {
     before(client.setup);
 
     const generateForm = 'form[name="pdwGenForm"]';
