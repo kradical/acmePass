@@ -43,7 +43,7 @@ describe('Listing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe.only('Hiding/Showing ACMEPass passwords', function () {
+describe('Hiding/Showing ACMEPass passwords', function () {
     before(client.setup);
 
     const newAcmePassButton = 'button.btn.btn-primary';
@@ -83,7 +83,7 @@ describe.only('Hiding/Showing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe('Creating ACMEPass passwords', function () {
+describe.only('Creating ACMEPass passwords', function () {
     before(client.setup);
 
     const newAcmePassButton = 'button.btn.btn-primary';
@@ -91,6 +91,14 @@ describe('Creating ACMEPass passwords', function () {
     const cancelButton = '.btn-default';
 
     it('it creates an ACMEPass', function () {
+        const firstRow = 'tr:first-child';
+        const siteCell = 'td:nth-child(2)';
+        const loginCell = 'td:nth-child(3)';
+        const passwordCell = 'td:nth-child(4) input.acmepass-password';
+        const firstRowSite = `${firstRow} ${siteCell}`;
+        const firstRowLogin = `${firstRow} ${loginCell}`;
+        const firstRowPassword = `${firstRow} ${passwordCell}`;
+
         return client
             .waitForExist(newAcmePassButton)
             .click(newAcmePassButton)
@@ -99,6 +107,18 @@ describe('Creating ACMEPass passwords', function () {
             .setValue('#field_login', 'testlogin')
             .setValue('#field_password', 'testpassword')
             .click(saveAcmePassButton)
+            .waitForVisible(firstRowSite)
+            .getText(firstRowSite).then(function (nametext) {
+                assert.strictEqual(nametext, 'testname', `site fields not equal '${nametext}' !== 'testname'`);
+            })
+            .waitForVisible(firstRowLogin)
+            .getText(firstRowLogin).then(function (logintext) {
+                assert.strictEqual(logintext, 'testlogin', `site fields not equal '${logintext}' !== 'testlogin'`);
+            })
+            .waitForVisible(firstRowPassword)
+            .getValue(firstRowPassword).then(function (passwordtext) {
+                assert.strictEqual(passwordtext, 'testpassword', `site fields not equal '${passwordtext}' !== 'testpassword'`);
+            });
     })
 
     it('it cancels the creation of an ACMEPass', function () {
