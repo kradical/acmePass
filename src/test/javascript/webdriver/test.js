@@ -33,7 +33,7 @@ client.setup = function () {
         .click(acmePassTab)
 }
 
-describe.only('Listing ACMEPass passwords', function () {
+describe('Listing ACMEPass passwords', function () {
     before(client.setup);
 
     //Sorting Selectors
@@ -66,7 +66,6 @@ describe.only('Listing ACMEPass passwords', function () {
     const modifiedDateCell = 'td:nth-child(6)';
 
     //util selectors
-    const dialog = 'body > div.modal.fade.ng-isolate-scope.in > div > div > form'
     const passwordToggle = 'td:nth-child(4) > div > span'
 
     var firstValue
@@ -82,7 +81,6 @@ describe.only('Listing ACMEPass passwords', function () {
             .setValue('#field_login', 'ctestlogin')
             .setValue('#field_password', 'btestpassword')
             .click(saveAcmePassButton)
-            .waitForExist(dialog, true)
             .waitForExist(newAcmePassButton)
             .click(newAcmePassButton)
             .waitForExist('#field_site')
@@ -90,7 +88,6 @@ describe.only('Listing ACMEPass passwords', function () {
             .setValue('#field_login', 'btestlogin')
             .setValue('#field_password', 'atestpassword')
             .click(saveAcmePassButton)
-            .waitForExist(dialog, true)
             .waitForExist(newAcmePassButton)
             .click(newAcmePassButton)
             .waitForExist('#field_site')
@@ -98,7 +95,7 @@ describe.only('Listing ACMEPass passwords', function () {
             .setValue('#field_login', 'atestlogin')
             .setValue('#field_password', 'ctestpassword')
             .click(saveAcmePassButton)
-            .waitForExist(dialog, 2000, true)
+            .waitForExist(thirdRow)
             .isExisting(thirdRow).then(function(bool) {
                 assert(bool, "Failed to create 3 ACMEPasses")
             })
@@ -227,70 +224,6 @@ describe.only('Listing ACMEPass passwords', function () {
             })
     })
 
-    ////////////////////////////////////////////////////////////////////////////
-    //Sort by Password
-    ////////////////////////////////////////////////////////////////////////////
-    it('it sorts list by Password (A-Z)', function () {
-        return client
-            .waitForExist(sortByPassword, 5000)
-            .click(sortByPassword)
-            .waitForExist(thirdRow)
-            .waitForExist(firstRow + ' > ' + passwordToggle)
-            .click(firstRow + ' > ' + passwordToggle)
-            .getValue(firstRow + ' > ' + passwordCell).then(function(text) {
-                firstValue = text.toLowerCase()
-            })
-            .waitForExist(firstRow + ' > ' + passwordToggle)
-            .click(firstRow + ' > ' + passwordToggle)
-            .waitForExist(secondRow + ' > ' + passwordToggle)
-            .click(secondRow + ' > ' + passwordToggle)
-            .getValue(secondRow + ' > ' + passwordCell).then(function(text) {
-                secondValue = text.toLowerCase()
-            })
-            .waitForExist(secondRow + ' > ' + passwordToggle)
-            .click(secondRow + ' > ' + passwordToggle)
-            .waitForExist(thirdRow + ' > ' + passwordToggle)
-            .click(thirdRow + ' > ' + passwordToggle)
-            .getValue(thirdRow + ' > ' + passwordCell).then(function(text) {
-                thirdValue = text.toLowerCase()
-            })
-            .waitForExist(thirdRow + ' > ' + passwordToggle)
-            .click(thirdRow + ' > ' + passwordToggle)
-            .isExisting(sortByPassword + ' > ' + sortAZ).then( function () {
-                assert(firstValue <= secondValue && secondValue <= thirdValue, 'Failed to sort list by (A-Z) Password correctly');
-            })
-    })
-
-    it('it sorts list by Password (Z-A)', function () {
-        return client
-            .waitForExist(sortByPassword, 5000)
-            .click(sortByPassword)
-            .waitForExist(thirdRow)
-            .waitForExist(firstRow + ' > ' + passwordToggle)
-            .click(firstRow + ' > ' + passwordToggle)
-            .getValue(firstRow + ' > ' + passwordCell).then(function(text) {
-                firstValue = text.toLowerCase()
-            })
-            .waitForExist(firstRow + ' > ' + passwordToggle)
-            .click(firstRow + ' > ' + passwordToggle)
-            .waitForExist(secondRow + ' > ' + passwordToggle)
-            .click(secondRow + ' > ' + passwordToggle)
-            .getValue(secondRow + ' > ' + passwordCell).then(function(text) {
-                secondValue = text.toLowerCase()
-            })
-            .waitForExist(secondRow + ' > ' + passwordToggle)
-            .click(secondRow + ' > ' + passwordToggle)
-            .waitForExist(thirdRow + ' > ' + passwordToggle)
-            .click(thirdRow + ' > ' + passwordToggle)
-            .getValue(thirdRow + ' > ' + passwordCell).then(function(text) {
-                thirdValue = text.toLowerCase()
-            })
-            .waitForExist(thirdRow + ' > ' + passwordToggle)
-            .click(thirdRow + ' > ' + passwordToggle)
-            .isExisting(sortByPassword + ' > ' + sortZA).then( function () {
-                assert(firstValue >= secondValue && secondValue >= thirdValue, 'Failed to sort list (Z-A) by Password correctly');
-            })
-    })
 
     ////////////////////////////////////////////////////////////////////////////
     //Sort by Created Date
@@ -417,7 +350,7 @@ describe('Hiding/Showing ACMEPass passwords', function () {
     after(client.end);
 });
 
-describe.only('Creating ACMEPass passwords', function () {
+describe('Creating ACMEPass passwords', function () {
     before(client.setup);
 
     const newAcmePassButton = 'button.btn.btn-primary';
@@ -433,6 +366,8 @@ describe.only('Creating ACMEPass passwords', function () {
         const firstRowLogin = `${firstRow} ${loginCell}`;
         const firstRowPassword = `${firstRow} ${passwordCell}`;
 
+        const sortByCreatedDate = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(5)'
+
         return client
             .waitForExist(newAcmePassButton)
             .click(newAcmePassButton)
@@ -441,6 +376,9 @@ describe.only('Creating ACMEPass passwords', function () {
             .setValue('#field_login', 'testlogin')
             .setValue('#field_password', 'testpassword')
             .click(saveAcmePassButton)
+            .waitForVisible(sortByCreatedDate)
+            .click(sortByCreatedDate)
+            .click(sortByCreatedDate)
             .waitForVisible(firstRowSite)
             .getText(firstRowSite).then(function (nametext) {
                 assert.strictEqual(nametext, 'testname', `site fields not equal '${nametext}' !== 'testname'`);
@@ -528,7 +466,7 @@ describe.only('Creating ACMEPass passwords', function () {
 /**
  * Tests that all fields of a password are editable
  */
-describe.only('Editing ACMEPass passwords', function () {
+describe('Editing ACMEPass passwords', function () {
     const mainButton = 'button.btn.btn-primary';
     const savePass = `div.modal-footer ${mainButton}`;
     const firstRow = 'tr:first-child';
@@ -633,7 +571,7 @@ describe.only('Editing ACMEPass passwords', function () {
 /**
  * Tests that password deletion works as expected
  */
-describe.only('Deleting ACMEPass passwords', function () {
+describe('Deleting ACMEPass passwords', function () {
     before(client.setup);
 
     const firstRow = 'tr:first-child'
@@ -689,7 +627,7 @@ describe.only('Deleting ACMEPass passwords', function () {
 /**
  * Tests that password generation works as expected
  */
-describe.only('Generating ACMEPass passwords', function () {
+describe('Generating ACMEPass passwords', function () {
     before(client.setup);
 
     const generateForm = 'form[name="pdwGenForm"]';
