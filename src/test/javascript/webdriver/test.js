@@ -33,11 +33,345 @@ client.setup = function () {
         .click(acmePassTab)
 }
 
-describe('Listing ACMEPass passwords', function () {
+describe.only('Listing ACMEPass passwords', function () {
     before(client.setup);
 
-    it('has a stub', function () {
+    //Sorting Selectors
+    const sortByID = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(1)'
+    const sortBySite = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(2)'
+    const sortByLogin = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(3)'
+    const sortByPassword = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(4)'
+    const sortByCreatedDate = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(5)'
+    const sortByLastModifiedDate = 'body > div:nth-child(3) > div > div > div.table-responsive > table > thead > tr > th:nth-child(6)'
+
+    // Sorting Symbols Selectors
+    const sortAZ = 'span.glyphicon.glyphicon-sort-by-attributes'
+    const sortZA = 'span.glyphicon.glyphicon-sort-by-attributes-alt'
+
+    //Creating ACMEPass
+    const newAcmePassButton = 'body > div:nth-child(3) > div > div > div.container-fluid > div > div > button';
+    const saveAcmePassButton = 'body > div.modal.fade.ng-isolate-scope.in > div > div > form > div.modal-footer > button.btn.btn-primary';
+
+    //3rd row selector
+    const firstRow = 'body > div:nth-child(3) > div > div > div.table-responsive > table > tbody > tr:nth-child(1)'
+    const secondRow = 'body > div:nth-child(3) > div > div > div.table-responsive > table > tbody > tr:nth-child(2)'
+    const thirdRow = 'body > div:nth-child(3) > div > div > div.table-responsive > table > tbody > tr:nth-child(3)'
+
+    //Table row cell selectors
+    const idCell = 'td:nth-child(1)';
+    const siteCell = 'td:nth-child(2)';
+    const loginCell = 'td:nth-child(3)';
+    const passwordCell = 'td:nth-child(4) > div > input';
+    const createdDateCell = 'td:nth-child(5)';
+    const modifiedDateCell = 'td:nth-child(6)';
+
+    //util selectors
+    const dialog = 'body > div.modal.fade.ng-isolate-scope.in > div > div > form'
+    const passwordToggle = 'td:nth-child(4) > div > span'
+
+    var firstValue
+    var secondValue
+    var thirdValue
+
+    it('it creates an ACMEPass', function () {
         return client
+            .waitForExist(newAcmePassButton, 5000)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'atestname')
+            .setValue('#field_login', 'ctestlogin')
+            .setValue('#field_password', 'btestpassword')
+            .click(saveAcmePassButton)
+            .waitForExist(dialog, true)
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'ctestname')
+            .setValue('#field_login', 'btestlogin')
+            .setValue('#field_password', 'atestpassword')
+            .click(saveAcmePassButton)
+            .waitForExist(dialog, true)
+            .waitForExist(newAcmePassButton)
+            .click(newAcmePassButton)
+            .waitForExist('#field_site')
+            .setValue('#field_site', 'btestname')
+            .setValue('#field_login', 'atestlogin')
+            .setValue('#field_password', 'ctestpassword')
+            .click(saveAcmePassButton)
+            .waitForExist(dialog, 2000, true)
+            .isExisting(thirdRow).then(function(bool) {
+                assert(bool, "Failed to create 3 ACMEPasses")
+            })
+    })
+
+    ////////////////////////////////////////////////////////////////////////////
+    //Sort by ID
+    ////////////////////////////////////////////////////////////////////////////
+    it('it sorts list by ID (Z-A)', function () {
+        return client
+            .waitForExist(sortByID, 5000)
+            .click(sortByID)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + idCell).then(function(text) {
+                firstValue = text
+            })
+            .getText(secondRow + ' > ' + idCell).then(function(text) {
+                secondValue = text
+            })
+            .getText(thirdRow + ' > ' + idCell).then(function(text) {
+                thirdValue = text
+            })
+            .isExisting(sortByID + ' > ' + sortZA).then( function () {
+                assert(firstValue > secondValue && secondValue > thirdValue, 'Failed to sort list (Z-A) by ID correctly');
+            })
+    })
+
+    it('it sorts list by ID (A-Z)', function () {
+        return client
+            .waitForExist(sortByID, 5000)
+            .click(sortByID)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + idCell).then(function(text) {
+                firstValue = text
+            })
+            .getText(secondRow + ' > ' + idCell).then(function(text) {
+                secondValue = text
+            })
+            .getText(thirdRow + ' > ' + idCell).then(function(text) {
+                thirdValue = text
+            })
+            .isExisting(sortByID + ' > ' + sortAZ).then( function () {
+                assert(firstValue < secondValue && secondValue < thirdValue, 'Failed to sort list by (A-Z) ID correctly');
+            })
+    })
+
+    ////////////////////////////////////////////////////////////////////////////
+    //Sort by Site
+    ////////////////////////////////////////////////////////////////////////////
+    it('it sorts list by Site (A-Z)', function () {
+        return client
+            .waitForExist(sortBySite, 5000)
+            .click(sortBySite)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + siteCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + siteCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + siteCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortBySite + ' > ' + sortAZ).then( function () {
+                assert(firstValue <= secondValue && secondValue <= thirdValue, 'Failed to sort list by (A-Z) Site correctly');
+            })
+    })
+
+    it('it sorts list by Site (Z-A)', function () {
+        return client
+            .waitForExist(sortBySite, 5000)
+            .click(sortBySite)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + siteCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + siteCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + siteCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortBySite + ' > ' + sortZA).then( function () {
+                assert(firstValue >= secondValue && secondValue >= thirdValue, 'Failed to sort list (Z-A) by Site correctly');
+            })
+    })
+
+    ////////////////////////////////////////////////////////////////////////////
+    //Sort by Login
+    ////////////////////////////////////////////////////////////////////////////
+    it('it sorts list by Login (A-Z)', function () {
+        return client
+            .waitForExist(sortByLogin, 5000)
+            .click(sortByLogin)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + loginCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + loginCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + loginCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortByLogin + ' > ' + sortAZ).then( function () {
+                assert(firstValue <= secondValue && secondValue <= thirdValue, 'Failed to sort list by (A-Z) Login correctly');
+            })
+    })
+
+    it('it sorts list by Login (Z-A)', function () {
+        return client
+            .waitForExist(sortByLogin, 5000)
+            .click(sortByLogin)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + loginCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + loginCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + loginCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortByLogin + ' > ' + sortZA).then( function () {
+                assert(firstValue >= secondValue && secondValue >= thirdValue, 'Failed to sort list (Z-A) by Login correctly');
+            })
+    })
+
+    ////////////////////////////////////////////////////////////////////////////
+    //Sort by Password
+    ////////////////////////////////////////////////////////////////////////////
+    it('it sorts list by Password (A-Z)', function () {
+        return client
+            .waitForExist(sortByPassword, 5000)
+            .click(sortByPassword)
+            .waitForExist(thirdRow)
+            .waitForExist(firstRow + ' > ' + passwordToggle)
+            .click(firstRow + ' > ' + passwordToggle)
+            .getValue(firstRow + ' > ' + passwordCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .waitForExist(firstRow + ' > ' + passwordToggle)
+            .click(firstRow + ' > ' + passwordToggle)
+            .waitForExist(secondRow + ' > ' + passwordToggle)
+            .click(secondRow + ' > ' + passwordToggle)
+            .getValue(secondRow + ' > ' + passwordCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .waitForExist(secondRow + ' > ' + passwordToggle)
+            .click(secondRow + ' > ' + passwordToggle)
+            .waitForExist(thirdRow + ' > ' + passwordToggle)
+            .click(thirdRow + ' > ' + passwordToggle)
+            .getValue(thirdRow + ' > ' + passwordCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .waitForExist(thirdRow + ' > ' + passwordToggle)
+            .click(thirdRow + ' > ' + passwordToggle)
+            .isExisting(sortByPassword + ' > ' + sortAZ).then( function () {
+                assert(firstValue <= secondValue && secondValue <= thirdValue, 'Failed to sort list by (A-Z) Password correctly');
+            })
+    })
+
+    it('it sorts list by Password (Z-A)', function () {
+        return client
+            .waitForExist(sortByPassword, 5000)
+            .click(sortByPassword)
+            .waitForExist(thirdRow)
+            .waitForExist(firstRow + ' > ' + passwordToggle)
+            .click(firstRow + ' > ' + passwordToggle)
+            .getValue(firstRow + ' > ' + passwordCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .waitForExist(firstRow + ' > ' + passwordToggle)
+            .click(firstRow + ' > ' + passwordToggle)
+            .waitForExist(secondRow + ' > ' + passwordToggle)
+            .click(secondRow + ' > ' + passwordToggle)
+            .getValue(secondRow + ' > ' + passwordCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .waitForExist(secondRow + ' > ' + passwordToggle)
+            .click(secondRow + ' > ' + passwordToggle)
+            .waitForExist(thirdRow + ' > ' + passwordToggle)
+            .click(thirdRow + ' > ' + passwordToggle)
+            .getValue(thirdRow + ' > ' + passwordCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .waitForExist(thirdRow + ' > ' + passwordToggle)
+            .click(thirdRow + ' > ' + passwordToggle)
+            .isExisting(sortByPassword + ' > ' + sortZA).then( function () {
+                assert(firstValue >= secondValue && secondValue >= thirdValue, 'Failed to sort list (Z-A) by Password correctly');
+            })
+    })
+
+    ////////////////////////////////////////////////////////////////////////////
+    //Sort by Created Date
+    ////////////////////////////////////////////////////////////////////////////
+    it('it sorts list by Created Date (A-Z)', function () {
+        return client
+            .waitForExist(sortByCreatedDate, 5000)
+            .click(sortByCreatedDate)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + createdDateCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + createdDateCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + createdDateCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortByCreatedDate + ' > ' + sortAZ).then( function () {
+                assert(firstValue <= secondValue && secondValue <= thirdValue, 'Failed to sort list by (A-Z) Created Date correctly');
+            })
+    })
+
+    it('it sorts list by Created Date (Z-A)', function () {
+        return client
+            .waitForExist(sortByCreatedDate, 5000)
+            .click(sortByCreatedDate)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + createdDateCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + createdDateCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + createdDateCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortByCreatedDate + ' > ' + sortZA).then( function () {
+                assert(firstValue >= secondValue && secondValue >= thirdValue, 'Failed to sort list (Z-A) by Created Date correctly');
+            })
+    })
+
+    ////////////////////////////////////////////////////////////////////////////
+    //Sort by Last Modified Date
+    ////////////////////////////////////////////////////////////////////////////
+    it('it sorts list by Last Modified Date (A-Z)', function () {
+        return client
+            .waitForExist(sortByLastModifiedDate, 5000)
+            .click(sortByLastModifiedDate)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + modifiedDateCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + modifiedDateCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + modifiedDateCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortByLastModifiedDate + ' > ' + sortAZ).then( function () {
+                assert(firstValue <= secondValue && secondValue <= thirdValue, 'Failed to sort list by (A-Z) Last Modified Date correctly');
+            })
+    })
+
+    it('it sorts list by Last Modified Date (Z-A)', function () {
+        return client
+            .waitForExist(sortByLastModifiedDate, 5000)
+            .click(sortByLastModifiedDate)
+            .waitForExist(thirdRow)
+            .getText(firstRow + ' > ' + modifiedDateCell).then(function(text) {
+                firstValue = text.toLowerCase()
+            })
+            .getText(secondRow + ' > ' + modifiedDateCell).then(function(text) {
+                secondValue = text.toLowerCase()
+            })
+            .getText(thirdRow + ' > ' + modifiedDateCell).then(function(text) {
+                thirdValue = text.toLowerCase()
+            })
+            .isExisting(sortByLastModifiedDate + ' > ' + sortZA).then( function () {
+                assert(firstValue >= secondValue && secondValue >= thirdValue, 'Failed to sort list (Z-A) by Last Moditied Date correctly');
+            })
     })
 
     after(client.end);
@@ -194,7 +528,7 @@ describe.only('Creating ACMEPass passwords', function () {
 /**
  * Tests that all fields of a password are editable
  */
-describe('Editing ACMEPass passwords', function () {
+describe.only('Editing ACMEPass passwords', function () {
     const mainButton = 'button.btn.btn-primary';
     const savePass = `div.modal-footer ${mainButton}`;
     const firstRow = 'tr:first-child';
@@ -355,7 +689,7 @@ describe.only('Deleting ACMEPass passwords', function () {
 /**
  * Tests that password generation works as expected
  */
-describe('Generating ACMEPass passwords', function () {
+describe.only('Generating ACMEPass passwords', function () {
     before(client.setup);
 
     const generateForm = 'form[name="pdwGenForm"]';
