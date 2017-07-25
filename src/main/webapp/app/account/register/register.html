@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-2">
-                    <form ng-show="!vm.success" name="form" method="post" role="form" novalidate ng-submit="vm.register()" show-validation>
+                    <form ng-show="!vm.success" name="form" method="post" autocomplete="off" role="form" novalidate ng-submit="vm.register()" show-validation>
                         <div class="form-group">
                             <label class="control-label" for="email">E-mail</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Your e-mail"
