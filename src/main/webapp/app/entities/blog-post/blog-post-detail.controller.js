@@ -23,7 +23,9 @@
 				postId: vm.blogPost.id
 			}, function (data) {
 				data.forEach(function(comment){
-					comment.htmlContent = $sce.trustAsHtml(comment.content);
+					console.log(comment.content);
+					var htmlContent = comment.content.replace(/href='javascript:/g, "href='");
+					comment.htmlContent = $sce.trustAsHtml(htmlContent);
 				});
 				vm.comments = data;
 			}, function (error) {
@@ -51,8 +53,6 @@
 
 			return sanitized;
 		}
-		
-		sanitize("[b]Hello[/b] and [i]Bye<script>alert(6)</script>[/i]. Look at [url]google.com[/url]<script>alert(5)</script> no [s]sheeeeeet[/s]");
 
 		var unsubscribe = $rootScope.$on('acmeApp:blogPostUpdate', function (event, result) {
 			vm.blogPost = result;
