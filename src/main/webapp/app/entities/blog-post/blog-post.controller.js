@@ -39,7 +39,7 @@
                 vm.page = pagingParams.page;
             }
             function onError(error) {
-                AlertService.error(error.data.message);
+                AlertService.error("Error loading blog posts");
             }
         }
 

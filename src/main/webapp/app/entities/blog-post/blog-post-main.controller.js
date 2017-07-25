@@ -23,7 +23,7 @@
 					vm.posts[post.type].push(post);
 				});
 			}, function (error) {
-				AlertService.error(error.data.message);
+				AlertService.error("Error loading blog posts");
 			});
 		}
 	}

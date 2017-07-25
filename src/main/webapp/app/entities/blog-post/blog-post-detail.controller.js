@@ -28,7 +28,7 @@
 				});
 				vm.comments = data;
 			}, function (error) {
-				AlertService.error(error.data.message);
+				AlertService.error("Error loading comments");
 			});
 		}
 		
@@ -73,7 +73,7 @@
 				$scope.commentForm.$setPristine();
 				$scope.commentForm.$setUntouched();
 			}, function (error) {
-				AlertService.error(error.data.message);
+				AlertService.error("Error saving comment");
 				vm.isSaving = false;
 			});
 		}

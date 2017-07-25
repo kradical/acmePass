@@ -21,7 +21,7 @@
 					return v;
 				});
 			}, function (error) {
-				AlertService.error(error.data.message);
+				AlertService.error("Error loading resources");
 			});
 		}
 

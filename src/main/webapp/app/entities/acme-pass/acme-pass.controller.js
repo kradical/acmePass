@@ -42,7 +42,7 @@
             }
 
             function onError(error) {
-                AlertService.error(error.data.message);
+                AlertService.error("Error loading acmePasses");
             }
         }
 
