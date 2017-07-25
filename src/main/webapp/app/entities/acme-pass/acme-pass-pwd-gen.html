@@ -55,7 +55,8 @@
 
 		<h4>Password</h4>
 		<div class="form-group">
-            <input type="text" class="form-control" name="password" id="field_password" ng-model="vm.password"/>
+            <input ng-attr-type="{{ vm.showPassword ? 'text' : 'password' }}" class="form-control" name="password" id="field_password" ng-model="vm.password" />
+            <span ng-click="vm.toggleVisible()" class="glyphicon glyphicon-eye-open" style="float:right; cursor: pointer; margin: -23px 16px 0px 0;"></span>
         </div>
 		<!--<label><input style="width: 50px;" maxlength="3" id="mindigits" type="text">Minimum Numeric Characters:</label>-->
     </div>

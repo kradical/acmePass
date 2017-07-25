@@ -17,7 +17,6 @@
 		vm.save = save;
 		vm.clear = clear;
 		vm.users = User.query();
-		vm.pwdVisible = false;
 		vm.toggleVisible = toggleVisible;
 
 		$timeout(function () {

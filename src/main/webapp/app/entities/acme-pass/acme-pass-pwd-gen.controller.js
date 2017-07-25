@@ -14,6 +14,7 @@
         vm.generate = generate;
         vm.save = save;
         vm.checkImpossible = checkImpossible;
+        vm.toggleVisible = toggleVisible;
 
         vm.genOptions = {
             length: 8,
@@ -84,6 +85,11 @@
         function save() {
             $scope.$emit('acmeApp:ACMEPassPwdGen', vm.password);
             $uibModalInstance.close(vm.password);
+        }
+
+        vm.showPassword = false;
+        function toggleVisible() {
+            vm.showPassword = !vm.showPassword;
         }
     }
 })();
