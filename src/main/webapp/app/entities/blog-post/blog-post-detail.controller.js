@@ -10,7 +10,6 @@
 		var vm = this;
 
 		vm.blogPost = entity;
-		vm.htmlContent = $sce.trustAsHtml(vm.blogPost.content);
 		vm.previousState = previousState.name;
 		vm.addComment = addComment;
 

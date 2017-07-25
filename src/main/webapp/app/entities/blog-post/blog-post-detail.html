@@ -18,7 +18,7 @@
                         <li ng-if="vm.blogPost.type != 'NEWS'">Author: {{vm.blogPost.author.firstName + " " + vm.blogPost.author.lastName}}</li>
                         <li>Posted: {{vm.blogPost.createdDate| date:"medium"}}</li>
                     </ul>
-                    <div ng-bind-html="vm.htmlContent" id="blog-post-content"></div>
+                    <div id="blog-post-content">{{vm.blogPost.content}}</div>
                 </div>
             </div>
             <aside class="col-md-4">
