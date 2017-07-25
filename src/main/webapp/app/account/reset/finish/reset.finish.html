@@ -36,7 +36,7 @@
                     </div>
 
                     <div ng-hide="vm.keyMissing">
-                        <form ng-show="!vm.success" name="form" method="post" autocomplete="off" role="form" novalidate ng-submit="vm.finishReset()" show-validation>
+                        <form ng-show="!vm.success" name="form" method="post" autocomplete="off" role="form" ng-submit="vm.finishReset()" show-validation>
                             <div class="form-group">
                                 <label class="control-label" for="password">New password</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="New password"
