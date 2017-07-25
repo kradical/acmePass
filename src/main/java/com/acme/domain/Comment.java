@@ -54,22 +54,12 @@ public class Comment extends AbstractDatedEntity implements Serializable {
 		return name;
 	}
 
-	public Comment name(String name) {
-		this.name = name;
-		return this;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public String getEmail() {
 		return email;
-	}
-
-	public Comment email(String email) {
-		this.email = email;
-		return this;
 	}
 
 	public void setEmail(String email) {
@@ -80,22 +70,12 @@ public class Comment extends AbstractDatedEntity implements Serializable {
 		return content;
 	}
 
-	public Comment content(String content) {
-		this.content = content;
-		return this;
-	}
-
 	public void setContent(String content) {
 		this.content = content;
 	}
 
 	public BlogPost getPost() {
 		return post;
-	}
-
-	public Comment post(BlogPost blogPost) {
-		this.post = blogPost;
-		return this;
 	}
 
 	public void setPost(BlogPost blogPost) {

@@ -66,7 +66,7 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 		return site;
 	}
 
-	public ACMEPass site(String site) {
+	public ACMEPass buildSite(String site) {
 		this.site = site;
 		return this;
 	}
@@ -79,7 +79,7 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 		return login;
 	}
 
-	public ACMEPass login(String login) {
+	public ACMEPass buildLogin(String login) {
 		this.login = login;
 		return this;
 	}
@@ -102,7 +102,7 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 		return null;
 	}
 
-	public ACMEPass password(String password) {
+	public ACMEPass buildPassword(String password) {
 		setPassword(password);
 		return this;
 	}
@@ -120,11 +120,6 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 
 	public User getUser() {
 		return user;
-	}
-
-	public ACMEPass user(User user) {
-		this.user = user;
-		return this;
 	}
 
 	public void setUser(User user) {
