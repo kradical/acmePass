@@ -4,7 +4,7 @@
             <div class="center wow fadeInDown">
                 <h2>ACME Security Systems</h2>
                 <p>Providing the Transition from Communication Security to Information Security</p>
-            </div>    
+            </div>
         </div><!--/.container-->
     </section>
 
@@ -67,7 +67,7 @@
         <div class="container">
             <div class="col-md-8">
 				<h3>Leave a Comment</h3>
-				<form name="commentForm" role="form" novalidate ng-submit="vm.addComment()" show-validation>
+				<form name="commentForm" role="form" ng-submit="vm.addComment()" show-validation>
 					<jhi-alert-error></jhi-alert-error>
 					<div class="form-group">
 						<label class="control-label" for="field_name">Name</label>
@@ -113,7 +113,7 @@
 						<div>
 							Formatting: Use [b]text[/b] for <b>bold</b>, [i]text[/i] for <i>italics</i>, [url]url[/url] for <a href="{{window.location.href}}">link</a>.
 						</div>
-						
+
 					</div>
 					<button type="submit" ng-disabled="commentForm.$invalid || vm.isSaving" class="btn btn-primary">
 						<span class="glyphicon glyphicon-save"></span>&nbsp;<span>Comment</span>
