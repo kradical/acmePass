@@ -8,8 +8,10 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.InvalidAlgorithmParameterException;
 import java.util.Objects;
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -32,6 +34,9 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 	private static final Key k = new SecretKeySpec(new byte[]{(byte) 0x21, (byte) 0x9e, (byte) 0x48, (byte) 0xd7,
 		(byte) 0x50, (byte) 0x49, (byte) 0x1d, (byte) 0x8c, (byte) 0x1e, (byte) 0x37,
 		(byte) 0x28, (byte) 0xaf, (byte) 0xcc, (byte) 0xfd, (byte) 0x9e, (byte) 0xc7}, "AES");
+
+	private static final byte[] iv = { 14, 1, 99, 123, 9, 4, 73, 27, 82, 0, 12, 1, 120, 98, 45, 1 };
+    private static final IvParameterSpec ivspec = new IvParameterSpec(iv);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -91,10 +96,10 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 	public String getPassword() {
 		if (password != null) {
 			try {
-				Cipher c = Cipher.getInstance("AES");
-				c.init(Cipher.DECRYPT_MODE, k);
+				Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+				c.init(Cipher.DECRYPT_MODE, k, ivspec);
 				return new String(c.doFinal(DatatypeConverter.parseBase64Binary(password)));
-			} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+			} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException ex) {
 				Logger.getLogger(ACMEPass.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
@@ -109,10 +114,10 @@ public class ACMEPass extends AbstractDatedEntity implements Serializable {
 
 	public void setPassword(String password) {
 		try {
-			Cipher c = Cipher.getInstance("AES");
-			c.init(Cipher.ENCRYPT_MODE, k);
+			Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			c.init(Cipher.ENCRYPT_MODE, k, ivspec);
 			this.password = DatatypeConverter.printBase64Binary(c.doFinal(password.getBytes()));
-		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException ex) {
 			Logger.getLogger(ACMEPass.class.getName()).log(Level.SEVERE, null, ex);
 			this.password = null;
 		}
