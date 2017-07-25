@@ -51,9 +51,9 @@ public class ACMEPassService {
 			acmePass.setUser(userService.getCurrentUser());
 		}
 
-		acmePass.site(dto.getSite())
-			.login(dto.getLogin())
-			.password(dto.getPassword());
+		acmePass.buildSite(dto.getSite())
+			.buildLogin(dto.getLogin())
+			.buildPassword(dto.getPassword());
 
 		return new ACMEPassDTO(acmePassRepository.save(acmePass));
 	}

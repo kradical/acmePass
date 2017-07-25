@@ -55,22 +55,12 @@ public class BlogPost extends AbstractDatedEntity implements Serializable {
 		return title;
 	}
 
-	public BlogPost title(String title) {
-		this.title = title;
-		return this;
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
 	public String getContent() {
 		return content;
-	}
-
-	public BlogPost content(String content) {
-		this.content = content;
-		return this;
 	}
 
 	public void setContent(String content) {
@@ -81,22 +71,12 @@ public class BlogPost extends AbstractDatedEntity implements Serializable {
 		return type;
 	}
 
-	public BlogPost type(BlogPostType type) {
-		this.type = type;
-		return this;
-	}
-
 	public void setType(BlogPostType type) {
 		this.type = type;
 	}
 
 	public User getAuthor() {
 		return author;
-	}
-
-	public BlogPost author(User user) {
-		this.author = user;
-		return this;
 	}
 
 	public void setAuthor(User user) {
