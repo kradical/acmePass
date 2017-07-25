@@ -17,7 +17,7 @@
 				'</ul>' +
 				'</div>',
 			scope: {
-				passwordToCheck: '='
+				passwordToCheck: null
 			},
 			link: linkFunc
 		};
